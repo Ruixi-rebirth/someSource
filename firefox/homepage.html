@@ -28866,10 +28866,10 @@
         autoChangeTheme: true,
 
         // Autochange by OS
-        changeThemeByOS: true,
+        changeThemeByOS: false,
 
         // Autochange by hour options (24hrs format, string must be in: hh:mm)
-        changeThemeByHour: false,
+        changeThemeByHour: true,
         hourDarkThemeActive: "18:30",
         hourDarkThemeInactive: "07:00",
 
@@ -29143,13 +29143,18 @@
       }
 
       if (CONFIG.changeThemeByOS && CONFIG.autoChangeTheme) {
-        if (
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-        ) {
-          enableDark();
-        } else {
-          disableDark();
+        if (window.matchMedia) {
+          const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+          const handleThemeChange = (e) => {
+            if (e.matches) {
+              enableDark();
+            } else {
+              disableDark();
+            }
+          };
+
+          handleThemeChange(mediaQuery);
+          mediaQuery.addEventListener("change", handleThemeChange);
         }
       }
 
